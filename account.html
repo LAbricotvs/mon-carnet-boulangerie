@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f7f5f0">
-<link rel="stylesheet" href="./styles.css?v=28">
+<link rel="stylesheet" href="./styles.css?v=30">
 <title>Mon compte · Mon Carnet de Boulangerie</title>
 </head>
 <body>
@@ -33,6 +33,7 @@
 <div id="joinFamilyTools" class="hidden"><p class="accountDescription">Vous n’avez pas encore rejoint de famille. Saisissez le code d’invitation reçu pour accéder à un carnet familial.</p><form id="accountJoinForm"><label>Code d’invitation<input id="accountFamilyCode" required maxlength="20" autocomplete="off" placeholder="Ex. A1B2C3D4E5"></label><button class="primary" type="submit">Rejoindre la famille</button></form></div>
 <p id="accountMsg" class="msg"></p>
 </section>
+<section class="accountPanel"><h2>Sauvegarder et imprimer</h2><p class="accountDescription">Exportez une copie de vos recettes ou imprimez votre carnet.</p><button id="exportCarnet" class="secondary" type="button">Exporter mon carnet (JSON)</button><button id="printCarnet" class="secondary" type="button">Imprimer mes recettes / PDF</button><p id="backupMsg" class="msg"></p></section>
 <section class="accountPanel">
 <h2>Son des minuteries</h2>
 <p class="accountDescription">Choisissez le son et son volume lorsque le carnet est ouvert.</p>
@@ -50,6 +51,6 @@
 </main>
 <footer>FAIT MAISON, AVEC PATIENCE ✳</footer>
 </div>
-<script type="module" src="./account.js?v=28"></script>
+<script type="module" src="./account.js?v=30"></script>
 </body>
 </html>
