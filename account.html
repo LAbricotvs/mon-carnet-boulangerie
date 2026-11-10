@@ -22,8 +22,10 @@
 </section>
 <section class="accountPanel" id="familySection">
 <h2>Ma famille</h2>
-<p class="accountDescription">Invitez votre épouse ou un autre membre à consulter et modifier les recettes du carnet familial.</p>
+<p class="accountDescription">Invitez un autre membre à consulter et modifier les recettes du carnet familial.</p>
 <div id="ownerTools" class="hidden">
+<label>Nom de la famille<input id="familyNameInput" maxlength="60" placeholder="Ma famille"></label>
+<button id="saveFamilyName" class="secondary" type="button">Enregistrer le nom</button>
 <button id="inviteFamily" class="primary" type="button">＋ Inviter un membre</button>
 <div id="inviteResult" class="inviteResult hidden"><span>Code à transmettre (valable 7 jours et utilisable une seule fois) :</span><strong id="inviteCode"></strong><button id="copyInvite" class="secondary" type="button">Copier le code</button></div>
 </div>
