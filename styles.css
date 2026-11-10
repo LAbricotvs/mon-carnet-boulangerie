@@ -21,3 +21,24 @@
 #zoomLabel{min-width:58px;text-align:center;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
 
 .familyBar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;margin-top:22px;border:1px solid var(--line);border-radius:12px;background:var(--paper);font-size:13px;font-weight:600;color:#72583f}.inviteResult{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:0 0 18px;padding:14px;border:1px solid #d9cbb8;border-radius:12px;background:#f5f1e9;font-size:12px;color:#62513e}.inviteResult strong{font-size:20px;letter-spacing:.12em;color:#493722}.familyBar .secondary,.inviteResult .secondary{padding:9px 12px}@media(max-width:420px){.familyBar{align-items:flex-start;flex-direction:column}.inviteResult{align-items:flex-start;flex-direction:column}}
+
+/* Account page */
+.accountLink{width:42px;height:42px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:var(--paper);color:var(--accent);text-decoration:none;transition:background .15s,border-color .15s}
+.accountLink:hover{background:var(--soft);border-color:#d8cbb8}
+.accountLink svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.accountShell main{max-width:760px;width:100%;margin:0 auto}
+.accountBack{font-size:12px;color:var(--accent);text-decoration:none;font-weight:600}
+.accountIntro{padding:42px 0 18px}
+.accountIntro small{font-size:10px;letter-spacing:.18em;color:var(--accent);font-weight:700}
+.accountIntro h1{font:500 clamp(40px,6vw,56px)/1.05 'Playfair Display',serif;margin:12px 0}
+.accountIntro p,.accountDescription{font-size:13px;color:var(--muted);line-height:1.7}
+.accountPanel{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:22px;margin:14px 0}
+.accountPanel h2{font:500 24px 'Playfair Display',serif;margin:0 0 14px}
+.accountInfo{display:flex;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid var(--line);font-size:13px}
+.accountInfo:last-child{border-bottom:0}
+.accountInfo span{color:var(--muted)}
+.accountInfo strong{font-weight:600;text-align:right;overflow-wrap:anywhere}
+.accountPanel>.primary{margin-top:8px}
+.accountLogout{margin-bottom:30px}
+.accountLogout .danger{background:#f5e9e4;color:#9b4935}
+@media(max-width:480px){.accountPanel{padding:18px}.accountInfo{align-items:flex-start;flex-direction:column;gap:5px}.accountInfo strong{text-align:left}.accountBack{font-size:11px}}
