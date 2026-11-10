@@ -66,3 +66,5 @@
 .timerButtons{grid-column:1/-1;display:flex;gap:7px}
 .timerButtons button{padding:9px 12px}
 @media(max-width:420px){.timerPresetRow{grid-template-columns:minmax(0,1fr) 52px 60px 30px;gap:5px}.timerPresetRow input{font-size:12px;padding:9px 5px}}
+
+.notificationPrompt{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 16px;margin:0 0 20px;border:1px solid #e8e1d6;border-radius:14px;background:#fffaf0}.notificationPrompt div{display:grid;gap:4px}.notificationPrompt small{color:#796f63;font-size:13px}.recipeTimes{line-height:1.7}
