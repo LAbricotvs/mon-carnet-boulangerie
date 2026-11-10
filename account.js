@@ -10,11 +10,11 @@ async function init(){
  $('accountEmail').textContent=session.user.email||'Compte connecté';
  const {data:member,error:memberError}=await db.from('family_members').select('family_id,role').eq('user_id',session.user.id).maybeSingle();
  if(memberError){message(memberError.message);return}
- if(!member){$('familyName').textContent='Aucune famille';message('Ce compte ne fait pas encore partie d’une famille.');return}
+ if(!member){$('familyName').textContent='Aucune famille';$('joinFamilyTools').classList.remove('hidden');message('Ce compte ne fait pas encore partie d’une famille.');return}
  const {data:family,error:familyError}=await db.from('families').select('name').eq('id',member.family_id).maybeSingle();
  if(familyError){message(familyError.message);return}
  $('familyName').textContent=family?.name||'Ma famille';
- if(member.role==='owner')$('ownerTools').classList.remove('hidden');
+ if(member.role==='owner'){$('ownerTools').classList.remove('hidden');$('familyNameInput').value=family?.name||'Ma famille';}
  else $('familyMemberInfo').classList.remove('hidden');
 }
 $('inviteFamily').onclick=async()=>{
@@ -38,4 +38,22 @@ $('logout').onclick=async()=>{
  if(error){message(error.message);b.disabled=false;return}
  location.replace('./index.html');
 };
+
+$('saveFamilyName').onclick=async()=>{
+ const b=$('saveFamilyName'),name=$('familyNameInput').value.trim();
+ if(!name){message('Indiquez un nom pour la famille.');return}
+ b.disabled=true;message('Enregistrement du nom…');
+ try{
+  const {data:{user},error:userError}=await db.auth.getUser();if(userError)throw userError;
+  const {data:member,error:memberError}=await db.from('family_members').select('family_id').eq('user_id',user.id).single();if(memberError)throw memberError;
+  const {error}=await db.from('families').update({name}).eq('id',member.family_id);if(error)throw error;
+  $('familyName').textContent=name;message('Nom de la famille modifié.');
+ }catch(e){message(e.message)}finally{b.disabled=false}
+};
+$('accountJoinForm').onsubmit=async e=>{
+ e.preventDefault();const b=e.submitter;b.disabled=true;message('Vérification du code…');
+ try{const {error}=await db.rpc('join_family_with_code',{p_code:$('accountFamilyCode').value.trim()});if(error)throw error;message('Famille rejointe !');location.reload()}
+ catch(err){message(err.message)}finally{b.disabled=false}
+};
+
 init();
