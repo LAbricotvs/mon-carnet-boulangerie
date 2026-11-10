@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7f5f0"><meta name="description" content="Carnet privé de recettes de boulangerie">
+<link rel="manifest" href="./manifest.webmanifest"><link rel="stylesheet" href="./styles.css">
+<title>Mon Carnet de Boulangerie</title>
+</head>
+<body>
+<div class="shell">
+<header><a class="brand" href="#"><span class="mark">✳</span><span><b>Mon Carnet</b><small>DE BOULANGERIE</small></span></a><button id="logout" class="ghost hidden">Déconnexion</button></header>
+<main>
+<section id="auth" class="auth">
+<div class="intro"><small>VOTRE COLLECTION PERSONNELLE</small><h1>Le bon pain<br><i>commence ici.</i></h1><p>Retrouvez, classez et partagez vos recettes maison.</p></div>
+<form id="authForm" class="panel"><h2>Votre espace privé</h2><label>E-mail<input id="email" type="email" required autocomplete="email"></label><label>Mot de passe<input id="password" type="password" required minlength="6" autocomplete="current-password"></label><button class="primary" type="submit">Se connecter</button><button id="signup" class="link" type="button">Créer le compte familial</button><p id="authMsg" class="msg"></p><p class="hint">Pour commencer, utilisez le même compte sur vos deux téléphones.</p></form>
+</section>
+<section id="app" class="hidden">
+<div class="heading"><div><small>VOTRE PETIT ATELIER</small><h1>Les recettes</h1></div><button id="add" class="primary">＋ Ajouter</button></div>
+<div class="search"><span>⌕</span><input id="search" placeholder="Rechercher une recette…"></div>
+<nav id="filters"><button class="active" data-cat="Toutes">Toutes</button><button data-cat="Pain">Pains</button><button data-cat="Brioche">Brioches</button><button data-cat="Pizza">Pizzas</button><button data-cat="Autre">Autres</button></nav>
+<div id="cards" class="cards"></div><div id="empty" class="empty hidden"><div>✳</div><h2>Votre carnet est encore vide</h2><p>Ajoutez votre première recette pour commencer.</p><button id="emptyAdd" class="primary">＋ Ajouter une recette</button></div>
+</section>
+</main><footer>FAIT MAISON, AVEC PATIENCE ✳</footer>
+</div>
+<dialog id="editor"><form id="recipeForm"><div class="dialogHead"><h2 id="formTitle">Nouvelle recette</h2><button type="button" id="close" class="close">×</button></div><input id="rid" type="hidden">
+<label>Nom de la recette<input id="name" required maxlength="90" placeholder="Ex. Pain au levain"></label>
+<div class="cols"><label>Catégorie<select id="category"><option>Pain</option><option>Brioche</option><option>Pizza</option><option>Autre</option></select></label><label>Levain<select id="starter"><option value="">Non précisé</option><option>Levain actif</option><option>Levure boulangère</option><option>Levain + levure</option><option>Sans levain</option></select></label></div>
+<label>Photo<input id="photo" type="file" accept="image/*"></label>
+<label>Ingrédients <small>Une ligne par ingrédient</small><textarea id="ingredients" rows="5" placeholder="500 g de farine&#10;350 g d'eau&#10;100 g de levain actif&#10;10 g de sel"></textarea></label>
+<label>Préparation<textarea id="instructions" rows="6" placeholder="Décrivez les étapes…"></textarea></label>
+<div class="cols"><label>Repos / fermentation<input id="rest" placeholder="Ex. 4 h + une nuit au frais"></label><label>Cuisson<input id="bake" placeholder="Ex. 35 min à 240 °C"></label></div>
+<label>Notes personnelles<textarea id="notes" rows="3"></textarea></label>
+<div class="actions"><button type="button" id="cancel" class="secondary">Annuler</button><button class="primary" id="save" type="submit">Enregistrer</button></div><p id="formMsg" class="msg"></p></form></dialog>
+<dialog id="detail"><div id="detailContent"></div></dialog>
+<script type="module" src="./app.js"></script>
+</body></html>
