@@ -3,6 +3,11 @@ const SUPABASE_URL='https://bttwplgymbcfahtyddmh.supabase.co';
 const SUPABASE_KEY='sb_publishable_GT6NcPnrv02i5R-WHofvWw_3JRb7YGX';
 const db=createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
+const TIMER_SOUND_KEY='boulangerie-timer-sound';
+function readSound(){try{return {...{tone:'double',volume:60},...JSON.parse(localStorage.getItem(TIMER_SOUND_KEY)||'{}')}}catch{return {tone:'double',volume:60}}}
+function saveSound(){const s={tone:$('timerTone').value,volume:Number($('timerVolume').value)};localStorage.setItem(TIMER_SOUND_KEY,JSON.stringify(s));$('timerVolumeValue').textContent=s.volume+' %'}
+function playTestSound(){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const s=readSound(),c=new C(),vol=s.volume/100,tones=s.tone==='bell'?[660,880,1100]:s.tone==='soft'?[523,659]:[880,660,880];tones.forEach((f,i)=>{const d=i*.35,o=c.createOscillator(),g=c.createGain();o.type=s.tone==='bell'?'sine':'triangle';o.frequency.value=f;o.connect(g);g.connect(c.destination);g.gain.setValueAtTime(.001,c.currentTime+d);g.gain.exponentialRampToValueAtTime(Math.max(.001,.22*vol),c.currentTime+d+.025);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+d+.22);o.start(c.currentTime+d);o.stop(c.currentTime+d+.24)});setTimeout(()=>c.close(),1600)}catch(e){$('soundMsg').textContent='Impossible de jouer le son.'}}
+function initSound(){const s=readSound();$('timerTone').value=s.tone;$('timerVolume').value=s.volume;$('timerVolumeValue').textContent=s.volume+' %';$('timerTone').onchange=saveSound;$('timerVolume').oninput=saveSound;$('testTimerSound').onclick=playTestSound}
 function message(text){$('accountMsg').textContent=text}
 async function init(){
  const {data:{session},error}=await db.auth.getSession();
@@ -56,4 +61,5 @@ $('accountJoinForm').onsubmit=async e=>{
  catch(err){message(err.message)}finally{b.disabled=false}
 };
 
+initSound();
 init();
