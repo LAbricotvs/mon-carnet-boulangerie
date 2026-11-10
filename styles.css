@@ -19,3 +19,5 @@
 .cropControls{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px}
 .cropControls button{min-width:38px;padding:9px 12px}
 #zoomLabel{min-width:58px;text-align:center;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+.familyBar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;margin-top:22px;border:1px solid var(--line);border-radius:12px;background:var(--paper);font-size:13px;font-weight:600;color:#72583f}.inviteResult{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:0 0 18px;padding:14px;border:1px solid #d9cbb8;border-radius:12px;background:#f5f1e9;font-size:12px;color:#62513e}.inviteResult strong{font-size:20px;letter-spacing:.12em;color:#493722}.familyBar .secondary,.inviteResult .secondary{padding:9px 12px}@media(max-width:420px){.familyBar{align-items:flex-start;flex-direction:column}.inviteResult{align-items:flex-start;flex-direction:column}}
