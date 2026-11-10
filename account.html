@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7f5f0">
+<link rel="stylesheet" href="./styles.css">
+<title>Mon compte · Mon Carnet de Boulangerie</title>
+</head>
+<body>
+<div class="shell accountShell">
+<header>
+<a class="brand" href="./index.html"><span class="mark">✳</span><span><b>Mon Carnet</b><small>DE BOULANGERIE</small></span></a>
+<a class="accountBack" href="./index.html">← Retour au carnet</a>
+</header>
+<main>
+<div class="accountIntro"><small>ESPACE PERSONNEL</small><h1>Mon compte</h1><p>Gérez votre compte et votre famille.</p></div>
+<section class="accountPanel">
+<h2>Mon profil</h2>
+<div class="accountInfo"><span>Adresse e-mail</span><strong id="accountEmail">Chargement…</strong></div>
+<div class="accountInfo"><span>Famille</span><strong id="familyName">Chargement…</strong></div>
+</section>
+<section class="accountPanel" id="familySection">
+<h2>Ma famille</h2>
+<p class="accountDescription">Invitez votre épouse ou un autre membre à consulter et modifier les recettes du carnet familial.</p>
+<div id="ownerTools" class="hidden">
+<button id="inviteFamily" class="primary" type="button">＋ Inviter un membre</button>
+<div id="inviteResult" class="inviteResult hidden"><span>Code à transmettre (valable 7 jours et utilisable une seule fois) :</span><strong id="inviteCode"></strong><button id="copyInvite" class="secondary" type="button">Copier le code</button></div>
+</div>
+<p id="familyMemberInfo" class="accountDescription hidden">Vous êtes membre de ce carnet familial. Le responsable de la famille peut générer un code pour inviter d'autres personnes.</p>
+<p id="accountMsg" class="msg"></p>
+</section>
+<section class="accountPanel">
+<h2>Paramètres</h2>
+<p class="accountDescription">D'autres réglages pourront être ajoutés ici par la suite.</p>
+</section>
+<section class="accountPanel accountLogout">
+<h2>Session</h2>
+<p class="accountDescription">Vous pouvez vous déconnecter de ce compte sur cet appareil.</p>
+<button id="logout" class="secondary danger" type="button">Se déconnecter</button>
+</section>
+</main>
+<footer>FAIT MAISON, AVEC PATIENCE ✳</footer>
+</div>
+<script type="module" src="./account.js"></script>
+</body>
+</html>
