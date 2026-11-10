@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f7f5f0">
-<link rel="stylesheet" href="./styles.css">
+<link rel="stylesheet" href="./styles.css?v=27">
 <title>Mon compte · Mon Carnet de Boulangerie</title>
 </head>
 <body>
@@ -34,8 +34,13 @@
 <p id="accountMsg" class="msg"></p>
 </section>
 <section class="accountPanel">
-<h2>Paramètres</h2>
-<p class="accountDescription">D'autres réglages pourront être ajoutés ici par la suite.</p>
+<h2>Son des minuteries</h2>
+<p class="accountDescription">Choisissez le son et son volume lorsque le carnet est ouvert.</p>
+<label>Son<select id="timerTone"><option value="double">Double bip</option><option value="bell">Cloche</option><option value="soft">Doux</option></select></label>
+<label>Volume <strong id="timerVolumeValue">60 %</strong><input id="timerVolume" type="range" min="0" max="100" value="60"></label>
+<p class="accountDescription">Le volume des notifications système reste contrôlé par Android.</p>
+<button id="testTimerSound" class="secondary" type="button">Tester le son</button>
+<p id="soundMsg" class="msg"></p>
 </section>
 <section class="accountPanel accountLogout">
 <h2>Session</h2>
@@ -45,6 +50,6 @@
 </main>
 <footer>FAIT MAISON, AVEC PATIENCE ✳</footer>
 </div>
-<script type="module" src="./account.js"></script>
+<script type="module" src="./account.js?v=27"></script>
 </body>
 </html>
