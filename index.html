@@ -45,7 +45,7 @@
 <div class="cropControls"><button type="button" id="zoomOut" class="secondary" aria-label="Dézoomer">−</button><span id="zoomLabel">100 %</span><button type="button" id="zoomIn" class="secondary" aria-label="Zoomer">+</button><button type="button" id="cropReset" class="secondary">Réinitialiser</button></div>
 </div>
 </section>
-<label>Ingrédients <small>Une ligne par ingrédient</small><textarea id="ingredients" rows="5" placeholder="500 g de farine&#10;350 g d'eau&#10;100 g de levain actif&#10;10 g de sel"></textarea></label>
+<section class="ingredientEditor"><label>Ingrédients <small>Indique chaque ingrédient, sa quantité et son unité.</small></label><div id="ingredientRows"></div><button type="button" id="addIngredient" class="secondary addIngredient">＋ Ajouter un ingrédient</button><textarea id="ingredients" class="hidden" rows="5"></textarea></section>
 <label>Préparation<textarea id="instructions" rows="6" placeholder="Décrivez les étapes…"></textarea></label>
 <div class="cols"><label>Repos / fermentation<input id="rest" placeholder="Ex. 4 h + une nuit au frais"></label><label>Cuisson<input id="bake" placeholder="Ex. 35 min à 240 °C"></label></div>
 <label>Notes personnelles<textarea id="notes" rows="3"></textarea></label>
