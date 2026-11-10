@@ -32,10 +32,9 @@
 <label class="photoChoice">▧ Choisir dans la galerie<input id="photoGallery" type="file" accept="image/*"></label>
 </div>
 <div id="photoTools" class="photoTools hidden">
-<p class="photoHint">Ajuste la partie visible dans la vignette</p>
-<div class="cropPreview"><img id="cropImage" alt="Aperçu du cadrage"></div>
-<label>Horizontal <input id="cropX" type="range" min="0" max="100" value="50"></label>
-<label>Vertical <input id="cropY" type="range" min="0" max="100" value="50"></label>
+<p class="photoHint">Avec un doigt, déplace la photo. Avec deux doigts, pince pour zoomer ou dézoomer.</p>
+<div class="cropPreview" id="cropPreview"><img id="cropImage" alt="Aperçu du cadrage" draggable="false"></div>
+<div class="cropControls"><button type="button" id="zoomOut" class="secondary" aria-label="Dézoomer">−</button><span id="zoomLabel">100 %</span><button type="button" id="zoomIn" class="secondary" aria-label="Zoomer">+</button><button type="button" id="cropReset" class="secondary">Réinitialiser</button></div>
 </div>
 </section>
 <label>Ingrédients <small>Une ligne par ingrédient</small><textarea id="ingredients" rows="5" placeholder="500 g de farine&#10;350 g d'eau&#10;100 g de levain actif&#10;10 g de sel"></textarea></label>
