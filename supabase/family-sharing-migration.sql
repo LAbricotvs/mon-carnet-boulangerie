@@ -49,10 +49,7 @@ using (exists (
 drop policy if exists family_members_read_family on public.family_members;
 create policy family_members_read_family on public.family_members
 for select to authenticated
-using (exists (
-  select 1 from public.family_members mine
-  where mine.family_id = family_members.family_id and mine.user_id = auth.uid()
-));
+using (user_id = auth.uid());
 
 -- Les recettes sont visibles et modifiables par tous les membres de la famille.
 drop policy if exists recipes_select_own on public.recipes;
