@@ -2,10 +2,10 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const SUPABASE_URL='https://bttwplgymbcfahtyddmh.supabase.co';
 const SUPABASE_KEY='sb_publishable_GT6NcPnrv02i5R-WHofvWw_3JRb7YGX';
 const db=createClient(SUPABASE_URL,SUPABASE_KEY);
-const $=id=>document.getElementById(id);let user=null,recipes=[],category='Toutes';
+const $=id=>document.getElementById(id);let user=null,recipes=[],category='Toutes',familyId=null,familyRole=null;
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function msg(id,s){$(id).textContent=s}
-function show(userData){user=userData;$('auth').classList.add('hidden');$('app').classList.remove('hidden');$('logout').classList.remove('hidden');load()}
+function show(userData){user=userData;$('auth').classList.add('hidden');$('logout').classList.remove('hidden');loadFamily()}
 function signed(path){return path?db.storage.from('recipe-photos').createSignedUrl(path,3600):Promise.resolve({data:null})}
 async function load(){const {data,error}=await db.from('recipes').select('*').order('created_at',{ascending:false});if(error){alert(error.message);return}recipes=await Promise.all((data||[]).map(async r=>{const {data:s}=await signed(r.photo_path);return {...r,photo_url:s?.signedUrl||null}}));render()}
 function render(){const term=$('search').value.toLocaleLowerCase('fr');const rows=recipes.filter(r=>(category==='Toutes'||r.category===category)&&[r.name,r.ingredients,r.notes].join(' ').toLocaleLowerCase('fr').includes(term));$('cards').innerHTML=rows.map(r=>'<article class="card" data-id="'+r.id+'"><div class="cover">'+(r.photo_url?'<img src="'+esc(r.photo_url)+'" alt="" style="'+cropStyle(r)+'">':'✳')+'</div><div class="info"><span class="tag">'+esc(r.category)+'</span><h3>'+esc(r.name)+'</h3><div class="meta">'+esc(r.starter||'Recette maison')+(r.bake_time?' · '+esc(r.bake_time):'')+'</div></div></article>').join('');$('empty').classList.toggle('hidden',rows.length>0);$('cards').classList.toggle('hidden',!rows.length);document.querySelectorAll('.card').forEach(c=>c.onclick=()=>detail(c.dataset.id))}
@@ -79,8 +79,8 @@ function handlePhoto(file){
 $('photoCamera').onchange=e=>handlePhoto(e.target.files[0]);
 $('photoGallery').onchange=e=>handlePhoto(e.target.files[0]);
 $('add').onclick=()=>edit();$('emptyAdd').onclick=()=>edit();$('close').onclick=$('cancel').onclick=()=>{$('editor').close();clearPhotoPreview()};
-async function upload(file){if(!file)return null;const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'');const path=user.id+'/'+crypto.randomUUID()+'.'+ext;const {error}=await db.storage.from('recipe-photos').upload(path,file,{contentType:file.type});if(error)throw error;return path}
-$('recipeForm').onsubmit=async e=>{e.preventDefault();const btn=$('save');btn.disabled=true;try{const id=$('rid').value,old=recipes.find(r=>r.id===id);const photo_path=await upload(selectedPhoto())||old?.photo_path||null;const payload={user_id:user.id,name:$('name').value.trim(),category:$('category').value,starter:$('starter').value,ingredients:$('ingredients').value,instructions:$('instructions').value,rest_time:$('rest').value,bake_time:$('bake').value,notes:$('notes').value,photo_path,photo_position_x:Math.round(clamp(Number($('cropX').value)||50,0,100)),photo_position_y:Math.round(clamp(Number($('cropY').value)||50,0,100)),photo_zoom:cropZoom};let q=id?db.from('recipes').update(payload).eq('id',id):db.from('recipes').insert(payload);let result=await q;
+async function upload(file){if(!file)return null;const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'');const path=familyId+'/'+crypto.randomUUID()+'.'+ext;const {error}=await db.storage.from('recipe-photos').upload(path,file,{contentType:file.type});if(error)throw error;return path}
+$('recipeForm').onsubmit=async e=>{e.preventDefault();const btn=$('save');btn.disabled=true;try{const id=$('rid').value,old=recipes.find(r=>r.id===id);const photo_path=await upload(selectedPhoto())||old?.photo_path||null;const payload={user_id:user.id,family_id:familyId,name:$('name').value.trim(),category:$('category').value,starter:$('starter').value,ingredients:$('ingredients').value,instructions:$('instructions').value,rest_time:$('rest').value,bake_time:$('bake').value,notes:$('notes').value,photo_path,photo_position_x:Math.round(clamp(Number($('cropX').value)||50,0,100)),photo_position_y:Math.round(clamp(Number($('cropY').value)||50,0,100)),photo_zoom:cropZoom};let q=id?db.from('recipes').update(payload).eq('id',id):db.from('recipes').insert(payload);let result=await q;
 if(result.error&&/photo_zoom|column.*does not exist|schema cache/i.test(result.error.message)){
  const compatible={...payload};delete compatible.photo_zoom;
  q=id?db.from('recipes').update(compatible).eq('id',id):db.from('recipes').insert(compatible);
@@ -89,6 +89,36 @@ if(result.error&&/photo_zoom|column.*does not exist|schema cache/i.test(result.e
 if(result.error)throw result.error;
 $('editor').close();clearPhotoPreview();await load()}catch(e){msg('formMsg',e.message)}finally{btn.disabled=false}};
 function detail(id){const r=recipes.find(x=>x.id===id);$('detailContent').innerHTML='<div class="detailCover">'+(r.photo_url?'<img src="'+esc(r.photo_url)+'" alt="" style="'+cropStyle(r)+'">':'✳')+'</div><div class="detailBody"><span class="tag">'+esc(r.category)+'</span><h2>'+esc(r.name)+'</h2><p>'+esc(r.starter||'')+'</p><h3>Ingrédients</h3><p>'+esc(r.ingredients||'Non renseignés')+'</p><h3>Préparation</h3><p>'+esc(r.instructions||'Non renseignée')+'</p><h3>Temps</h3><p>Repos : '+esc(r.rest_time||'—')+'\nCuisson : '+esc(r.bake_time||'—')+'</p>'+(r.notes?'<h3>Notes</h3><p>'+esc(r.notes)+'</p>':'')+'<div class="detailActions"><button id="editOne" class="secondary">Modifier</button><button id="deleteOne" class="secondary danger">Supprimer</button><button id="closeDetail" class="secondary">Fermer</button></div></div>';$('detail').showModal();$('closeDetail').onclick=()=>$('detail').close();$('editOne').onclick=()=>{$('detail').close();edit(r)};$('deleteOne').onclick=async()=>{if(!confirm('Supprimer cette recette ?'))return;const {error}=await db.from('recipes').delete().eq('id',r.id);if(error){alert(error.message);return}$('detail').close();load()}}
+
+async function loadFamily(){
+ const {data:members,error}=await db.from('family_members').select('family_id,role').eq('user_id',user.id).maybeSingle();
+ if(error){alert(error.message);return}
+ if(!members){
+  familyId=null;familyRole=null;$('app').classList.add('hidden');$('familyGate').classList.remove('hidden');return
+ }
+ familyId=members.family_id;familyRole=members.role;
+ $('familyGate').classList.add('hidden');$('app').classList.remove('hidden');
+ const {data:family}=await db.from('families').select('name').eq('id',familyId).maybeSingle();
+ $('familyName').textContent=family?.name||'Ma famille';
+ $('inviteFamily').classList.toggle('hidden',familyRole!=='owner');
+ await load()
+}
+$('joinFamilyForm').onsubmit=async e=>{
+ e.preventDefault();const b=e.submitter;b.disabled=true;msg('familyMsg','Vérification du code…');
+ try{const {error}=await db.rpc('join_family_with_code',{p_code:$('familyCode').value.trim()});if(error)throw error;$('familyCode').value='';msg('familyMsg','Famille rejointe !');await loadFamily()}
+ catch(err){msg('familyMsg',err.message)}finally{b.disabled=false}
+};
+$('inviteFamily').onclick=async()=>{
+ const b=$('inviteFamily');b.disabled=true;
+ try{const {data,error}=await db.rpc('create_family_invite');if(error)throw error;$('inviteCode').textContent=data;$('inviteResult').classList.remove('hidden')}
+ catch(err){alert(err.message)}finally{b.disabled=false}
+};
+$('copyInvite').onclick=async()=>{
+ const code=$('inviteCode').textContent;
+ try{await navigator.clipboard.writeText(code);$('copyInvite').textContent='Copié !';}
+ catch{$('copyInvite').textContent='Code : '+code}
+};
+
 $('authForm').onsubmit=async e=>{e.preventDefault();const {data,error}=await db.auth.signInWithPassword({email:$('email').value,password:$('password').value});if(error)msg('authMsg',error.message);else show(data.user)};
 $('signup').onclick=async()=>{const {data,error}=await db.auth.signUp({email:$('email').value,password:$('password').value});if(error)msg('authMsg',error.message);else if(data.session)show(data.user);else msg('authMsg','Compte créé. Vérifiez votre e-mail pour confirmer votre inscription.')};
 $('logout').onclick=async()=>{await db.auth.signOut();location.reload()};
