@@ -25,7 +25,19 @@
 <dialog id="editor"><form id="recipeForm"><div class="dialogHead"><h2 id="formTitle">Nouvelle recette</h2><button type="button" id="close" class="close">×</button></div><input id="rid" type="hidden">
 <label>Nom de la recette<input id="name" required maxlength="90" placeholder="Ex. Pain au levain"></label>
 <div class="cols"><label>Catégorie<select id="category"><option>Pain</option><option>Brioche</option><option>Pizza</option><option>Autre</option></select></label><label>Levain<select id="starter"><option value="">Non précisé</option><option>Levain actif</option><option>Levure boulangère</option><option>Levain + levure</option><option>Sans levain</option></select></label></div>
-<label>Photo<input id="photo" type="file" accept="image/*"></label>
+<section class="photoEditor">
+<label>Photo de la recette</label>
+<div class="photoChoices">
+<label class="photoChoice">📷 Prendre une photo<input id="photoCamera" type="file" accept="image/*" capture="environment"></label>
+<label class="photoChoice">▧ Choisir dans la galerie<input id="photoGallery" type="file" accept="image/*"></label>
+</div>
+<div id="photoTools" class="photoTools hidden">
+<p class="photoHint">Ajuste la partie visible dans la vignette</p>
+<div class="cropPreview"><img id="cropImage" alt="Aperçu du cadrage"></div>
+<label>Horizontal <input id="cropX" type="range" min="0" max="100" value="50"></label>
+<label>Vertical <input id="cropY" type="range" min="0" max="100" value="50"></label>
+</div>
+</section>
 <label>Ingrédients <small>Une ligne par ingrédient</small><textarea id="ingredients" rows="5" placeholder="500 g de farine&#10;350 g d'eau&#10;100 g de levain actif&#10;10 g de sel"></textarea></label>
 <label>Préparation<textarea id="instructions" rows="6" placeholder="Décrivez les étapes…"></textarea></label>
 <div class="cols"><label>Repos / fermentation<input id="rest" placeholder="Ex. 4 h + une nuit au frais"></label><label>Cuisson<input id="bake" placeholder="Ex. 35 min à 240 °C"></label></div>
