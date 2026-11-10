@@ -31,6 +31,7 @@
 <label class="photoChoice">📷 Prendre une photo<input id="photoCamera" type="file" accept="image/*" capture="environment"></label>
 <label class="photoChoice">▧ Choisir dans la galerie<input id="photoGallery" type="file" accept="image/*"></label>
 </div>
+<input type="hidden" id="cropX" value="50"><input type="hidden" id="cropY" value="50">
 <div id="photoTools" class="photoTools hidden">
 <p class="photoHint">Avec un doigt, déplace la photo. Avec deux doigts, pince pour zoomer ou dézoomer.</p>
 <div class="cropPreview" id="cropPreview"><img id="cropImage" alt="Aperçu du cadrage" draggable="false"></div>
