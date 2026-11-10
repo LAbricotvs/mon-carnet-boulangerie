@@ -11,3 +11,11 @@
 .photoTools label{margin:10px 0}
 .photoTools input[type=range]{padding:0;accent-color:#72583f}
 @media(max-width:420px){.photoChoices{grid-template-columns:1fr}}
+
+/* Direct touch crop: drag to reposition, pinch to zoom */
+.cropPreview{position:relative;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+.cropPreview:active{cursor:grabbing}
+.cropPreview img{display:block;pointer-events:none;user-select:none;-webkit-user-drag:none;will-change:transform}
+.cropControls{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px}
+.cropControls button{min-width:38px;padding:9px 12px}
+#zoomLabel{min-width:58px;text-align:center;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
