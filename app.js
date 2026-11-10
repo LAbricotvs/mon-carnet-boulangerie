@@ -13,8 +13,7 @@ $('filters').onclick=e=>{const b=e.target.closest('[data-cat]');if(!b)return;cat
 let previewObjectUrl=null, cropZoom=1, cropPointers=new Map(), cropGesture=null;
 function selectedPhoto(){return $('photoCamera').files[0]||$('photoGallery').files[0]||null}
 function cropStyle(r){
- const x=Number(r.photo_position_x??50),y=Number(r.photo_position_y??50),z=Number(r.photo_zoom??1);
- return 'object-fit:cover;object-position:50% 50%;transform:translate3d('+(-(x-50)*(z-1))+'%,'+(-(y-50)*(z-1))+'%,0) scale('+z+');transform-origin:center'
+ return 'object-fit:contain;object-position:center;transform:none;transform-origin:center'
 }
 function paintCrop(){
  const x=Number($('cropX').value),y=Number($('cropY').value);
