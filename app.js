@@ -64,7 +64,7 @@ function edit(r=null){
  $('recipeForm').reset();clearPhotoPreview();$('rid').value=r?.id||'';
  $('formTitle').textContent=r?'Modifier la recette':'Nouvelle recette';
  $('name').value=r?.name||'';$('category').value=r?.category||'Pain';$('starter').value=r?.starter||'';
- $('ingredients').value=r?.ingredients||'';$('instructions').value=r?.instructions||'';
+ $('ingredients').value=r?.ingredients||'';$('instructions').value=r?.instructions||'';$('quantity').value=r?.quantity||'';$('prep').value=r?.preparation_time||'';
  $('rest').value=r?.rest_time||'';$('bake').value=r?.bake_time||'';$('notes').value=r?.notes||'';
  if(r?.photo_url)setCropPreview(r.photo_url,r.photo_position_x??50,r.photo_position_y??50,r.photo_zoom??1);
  msg('formMsg','');$('editor').showModal()
@@ -80,7 +80,7 @@ $('photoCamera').onchange=e=>handlePhoto(e.target.files[0]);
 $('photoGallery').onchange=e=>handlePhoto(e.target.files[0]);
 $('add').onclick=()=>edit();$('emptyAdd').onclick=()=>edit();$('close').onclick=$('cancel').onclick=()=>{$('editor').close();clearPhotoPreview()};
 async function upload(file){if(!file)return null;const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'');const path=familyId+'/'+crypto.randomUUID()+'.'+ext;const {error}=await db.storage.from('recipe-photos').upload(path,file,{contentType:file.type});if(error)throw error;return path}
-$('recipeForm').onsubmit=async e=>{e.preventDefault();const btn=$('save');btn.disabled=true;try{const id=$('rid').value,old=recipes.find(r=>r.id===id);const photo_path=await upload(selectedPhoto())||old?.photo_path||null;const payload={user_id:user.id,family_id:familyId,name:$('name').value.trim(),category:$('category').value,starter:$('starter').value,ingredients:$('ingredients').value,instructions:$('instructions').value,rest_time:$('rest').value,bake_time:$('bake').value,notes:$('notes').value,photo_path,photo_position_x:Math.round(clamp(Number($('cropX').value)||50,0,100)),photo_position_y:Math.round(clamp(Number($('cropY').value)||50,0,100)),photo_zoom:cropZoom};let q=id?db.from('recipes').update(payload).eq('id',id):db.from('recipes').insert(payload);let result=await q;
+$('recipeForm').onsubmit=async e=>{e.preventDefault();const btn=$('save');btn.disabled=true;try{const id=$('rid').value,old=recipes.find(r=>r.id===id);const photo_path=await upload(selectedPhoto())||old?.photo_path||null;const payload={user_id:user.id,family_id:familyId,name:$('name').value.trim(),category:$('category').value,starter:$('starter').value,ingredients:$('ingredients').value,instructions:$('instructions').value,quantity:$('quantity').value.trim(),preparation_time:$('prep').value.trim(),rest_time:$('rest').value,bake_time:$('bake').value,notes:$('notes').value,photo_path,photo_position_x:Math.round(clamp(Number($('cropX').value)||50,0,100)),photo_position_y:Math.round(clamp(Number($('cropY').value)||50,0,100)),photo_zoom:cropZoom};let q=id?db.from('recipes').update(payload).eq('id',id):db.from('recipes').insert(payload);let result=await q;
 if(result.error&&/photo_zoom|column.*does not exist|schema cache/i.test(result.error.message)){
  const compatible={...payload};delete compatible.photo_zoom;
  q=id?db.from('recipes').update(compatible).eq('id',id):db.from('recipes').insert(compatible);
