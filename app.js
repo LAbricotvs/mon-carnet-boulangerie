@@ -5,7 +5,7 @@ const db=createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);let user=null,recipes=[],category='Toutes',familyId=null,familyRole=null;
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function msg(id,s){$(id).textContent=s}
-function show(userData){user=userData;$('auth').classList.add('hidden');$('logout').classList.remove('hidden');loadFamily()}
+function show(userData){user=userData;$('auth').classList.add('hidden');loadFamily()}
 function signed(path){return path?db.storage.from('recipe-photos').createSignedUrl(path,3600):Promise.resolve({data:null})}
 async function load(){const {data,error}=await db.from('recipes').select('*').order('created_at',{ascending:false});if(error){alert(error.message);return}recipes=await Promise.all((data||[]).map(async r=>{const {data:s}=await signed(r.photo_path);return {...r,photo_url:s?.signedUrl||null}}));render()}
 function render(){const term=$('search').value.toLocaleLowerCase('fr');const rows=recipes.filter(r=>(category==='Toutes'||r.category===category)&&[r.name,r.ingredients,r.notes].join(' ').toLocaleLowerCase('fr').includes(term));$('cards').innerHTML=rows.map(r=>'<article class="card" data-id="'+r.id+'"><div class="cover">'+(r.photo_url?'<img src="'+esc(r.photo_url)+'" alt="" style="'+cropStyle(r)+'">':'✳')+'</div><div class="info"><span class="tag">'+esc(r.category)+'</span><h3>'+esc(r.name)+'</h3><div class="meta">'+esc(r.starter||'Recette maison')+(r.bake_time?' · '+esc(r.bake_time):'')+'</div></div></article>').join('');$('empty').classList.toggle('hidden',rows.length>0);$('cards').classList.toggle('hidden',!rows.length);document.querySelectorAll('.card').forEach(c=>c.onclick=()=>detail(c.dataset.id))}
@@ -99,28 +99,15 @@ async function loadFamily(){
  familyId=members.family_id;familyRole=members.role;
  $('familyGate').classList.add('hidden');$('app').classList.remove('hidden');
  const {data:family}=await db.from('families').select('name').eq('id',familyId).maybeSingle();
- $('familyName').textContent=family?.name||'Ma famille';
- $('inviteFamily').classList.toggle('hidden',familyRole!=='owner');
- await load()
+  await load()
 }
 $('joinFamilyForm').onsubmit=async e=>{
  e.preventDefault();const b=e.submitter;b.disabled=true;msg('familyMsg','Vérification du code…');
  try{const {error}=await db.rpc('join_family_with_code',{p_code:$('familyCode').value.trim()});if(error)throw error;$('familyCode').value='';msg('familyMsg','Famille rejointe !');await loadFamily()}
  catch(err){msg('familyMsg',err.message)}finally{b.disabled=false}
 };
-$('inviteFamily').onclick=async()=>{
- const b=$('inviteFamily');b.disabled=true;
- try{const {data,error}=await db.rpc('create_family_invite');if(error)throw error;$('inviteCode').textContent=data;$('inviteResult').classList.remove('hidden')}
- catch(err){alert(err.message)}finally{b.disabled=false}
-};
-$('copyInvite').onclick=async()=>{
- const code=$('inviteCode').textContent;
- try{await navigator.clipboard.writeText(code);$('copyInvite').textContent='Copié !';}
- catch{$('copyInvite').textContent='Code : '+code}
-};
-
 $('authForm').onsubmit=async e=>{e.preventDefault();const {data,error}=await db.auth.signInWithPassword({email:$('email').value,password:$('password').value});if(error)msg('authMsg',error.message);else show(data.user)};
 $('signup').onclick=async()=>{const {data,error}=await db.auth.signUp({email:$('email').value,password:$('password').value});if(error)msg('authMsg',error.message);else if(data.session)show(data.user);else msg('authMsg','Compte créé. Vérifiez votre e-mail pour confirmer votre inscription.')};
-$('logout').onclick=async()=>{await db.auth.signOut();location.reload()};
+
 db.auth.getSession().then(({data})=>{if(data.session)show(data.session.user)});db.auth.onAuthStateChange((_e,s)=>{if(s&&!user)show(s.user)});
 if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
