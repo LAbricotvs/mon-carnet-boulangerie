@@ -61,5 +61,8 @@ $('accountJoinForm').onsubmit=async e=>{
  catch(err){message(err.message)}finally{b.disabled=false}
 };
 
+async function backupData(){const {data:recipes,error}=await db.from('recipes').select('*').order('created_at',{ascending:false});if(error)throw error;const {data:bakes,error:bakeError}=await db.from('bake_logs').select('*').order('baked_at',{ascending:false}).limit(1000);if(bakeError)throw bakeError;return {exported_at:new Date().toISOString(),format:'mon-carnet-boulangerie-v1',recipes:recipes||[],bake_logs:bakes||[]}}
+$('exportCarnet').onclick=async()=>{const b=$('exportCarnet');b.disabled=true;try{const d=await backupData(),blob=new Blob([JSON.stringify(d,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='mon-carnet-boulangerie.json';a.click();URL.revokeObjectURL(url);$('backupMsg').textContent='Sauvegarde téléchargée.'}catch(e){$('backupMsg').textContent=e.message}finally{b.disabled=false}};
+$('printCarnet').onclick=async()=>{const b=$('printCarnet');b.disabled=true;try{const d=await backupData(),w=window.open('','_blank');if(!w)throw new Error('Autorisez les fenêtres pop-up pour imprimer.');w.document.write('<html lang="fr"><meta charset="utf-8"><title>Mon Carnet de Boulangerie</title><body><h1>Mon Carnet de Boulangerie</h1>'+d.recipes.map(r=>'<article><h2>'+String(r.name||'')+'</h2><h3>Ingrédients</h3><pre>'+String(r.ingredients||'')+'</pre><h3>Préparation</h3><pre>'+String(r.instructions||'')+'</pre></article>').join('')+'</body></html>');w.document.close();w.print()}catch(e){$('backupMsg').textContent=e.message}finally{b.disabled=false}};
 initSound();
 init();
