@@ -81,3 +81,6 @@
 
 /* Empêche le détail d'une recette de déborder horizontalement sur mobile. */
 html,body{max-width:100%;overflow-x:hidden}#detail{overflow-x:hidden;overscroll-behavior-x:none;touch-action:pan-y}#detailContent{width:100%;min-width:0;overflow-x:clip}.detailCover{width:100%;max-width:100%;overflow:hidden}.detailCover img{display:block;max-width:100%}
+
+/* Version discrète affichée en bas de l'accueil. */
+.appVersion{margin:28px 0 10px;text-align:center;font-size:10px;letter-spacing:.04em;color:var(--muted);opacity:.65}
