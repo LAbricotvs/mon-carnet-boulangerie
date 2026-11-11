@@ -162,4 +162,4 @@ $('authForm').onsubmit=async e=>{e.preventDefault();const {data,error}=await db.
 $('signup').onclick=async()=>{const {data,error}=await db.auth.signUp({email:$('email').value,password:$('password').value});if(error)msg('authMsg',error.message);else if(data.session)show(data.user);else msg('authMsg','Compte créé. Vérifiez votre e-mail pour confirmer votre inscription.')};
 
 initSoundSettings();db.auth.getSession().then(({data})=>{if(data.session)show(data.session.user)});db.auth.onAuthStateChange((event,s)=>{if(event==='SIGNED_OUT'){location.reload();return}if(s&&!user)show(s.user)});
-if('serviceWorker'in navigator)window.addEventListener('load',async()=>{try{const reg=await navigator.serviceWorker.register('./sw.js?v=29',{updateViaCache:'none'});await reg.update()}catch(e){console.warn('Mise à jour hors ligne indisponible',e)}});
+if('serviceWorker'in navigator)window.addEventListener('load',async()=>{try{const reg=await navigator.serviceWorker.register('./sw.js?v=35',{updateViaCache:'none'});await reg.update()}catch(e){console.warn('Mise à jour hors ligne indisponible',e)}});
